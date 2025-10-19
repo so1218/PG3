@@ -1,29 +1,26 @@
 #include <stdio.h>
 #include <windows.h>
 
-template <typename T>
-T Min(T a, T b)
+// 再帰的に時給を計算して、合計賃金を返す関数
+int recursiveWage(int hours, int wage)
 {
-    return (a < b) ? a : b;
+    if (hours == 0)
+        return 0;
+    return wage + recursiveWage(hours - 1, wage * 2 - 50);
 }
 
 int main()
 {
-    // int
-    int a = 1, b = 2;
-    int minInt = Min(a, b);
+    int hours = 8;
 
-    // float
-    float x = 2.1f, y = 2.0f;
-    float minFloat = Min(x, y);
+    int general = hours * 1226;
 
-    // double
-    double p = 3.1, q = 3.0;
-    double minDouble = Min(p, q);
+    int recursive = recursiveWage(hours, 100);
 
-    printf("MinInt: %d\n", minInt);
-    printf("MinFloat: %.2f\n", minFloat);
-    printf("MinDouble: %.2lf\n", minDouble);
+    printf("働いた時間 %d時間\n", hours);
+    printf("一般的な賃金体系 %d円\n", general);
+    printf("再帰的な賃金体系 %d円\n", recursive);
+
 
     return 0;
 }
