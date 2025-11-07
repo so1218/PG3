@@ -2,25 +2,9 @@
 #include <stdlib.h> 
 #include <time.h>   
 #include <windows.h>
+#include <functional>
 
-
-void ShowResult(int roll, int userGuess)
-{
-    printf("出目は %d でした。\n", roll);
-
-    int actualResult = roll % 2;
-
-    if (userGuess == actualResult)
-    {
-        printf("正解\n");
-    }
-    else
-    {
-        printf("不正解\n");
-    }
-}
-
-void DelayReveal(void (*fn)(int, int), unsigned int delayMs, int roll, int userGuess)
+void DelayReveal(std::function<void(int, int)> fn, unsigned int delayMs, int roll, int userGuess)
 {
     Sleep(delayMs);
 
@@ -30,7 +14,7 @@ void DelayReveal(void (*fn)(int, int), unsigned int delayMs, int roll, int userG
 int main()
 {
     int userGuess;
-    int roll;     
+    int roll;
 
     srand((unsigned int)time(NULL));
 
@@ -39,7 +23,23 @@ int main()
 
     roll = rand() % 6 + 1;
 
-    DelayReveal(ShowResult, 3000, roll, userGuess);
+    DelayReveal(
+        [](int r, int guess) 
+        {
+            printf("出目は %d でした。\n", r);
+
+            int actualResult = r % 2;
+            if (guess == actualResult)
+            {
+                printf("正解\n");
+            }
+            else
+            {
+                printf("不正解\n");
+            }
+        }, 
+        3000, roll, userGuess
+    );
 
     return 0;
 }
