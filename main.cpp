@@ -1,45 +1,21 @@
-#include <stdio.h>  
-#include <stdlib.h> 
-#include <time.h>   
-#include <windows.h>
-#include <functional>
+#include <iostream>
+#include <thread> 
 
-void DelayReveal(std::function<void(int, int)> fn, unsigned int delayMs, int roll, int userGuess)
+void PrintThread(const char* thread)
 {
-    Sleep(delayMs);
-
-    fn(roll, userGuess);
+    std::cout << thread << std::endl;
 }
 
 int main()
 {
-    int userGuess;
-    int roll;
+    std::thread thread1(PrintThread, "thread1");
+    thread1.join();
 
-    srand((unsigned int)time(NULL));
+    std::thread thread2(PrintThread, "thread2");
+    thread2.join();
 
-    printf("半(奇数:1)か丁(偶数:0)か: ");
-    scanf_s("%d", &userGuess);
-
-    roll = rand() % 6 + 1;
-
-    DelayReveal(
-        [](int r, int guess) 
-        {
-            printf("出目は %d でした。\n", r);
-
-            int actualResult = r % 2;
-            if (guess == actualResult)
-            {
-                printf("正解\n");
-            }
-            else
-            {
-                printf("不正解\n");
-            }
-        }, 
-        3000, roll, userGuess
-    );
+    std::thread thread3(PrintThread, "thread3");
+    thread3.join();
 
     return 0;
 }
