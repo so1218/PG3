@@ -19,7 +19,7 @@ public:
 
     ~MapLoader()
     {
-        if (worker_.joinable())
+        if (worker_.joinable()) 
         {
             worker_.join();
         }
@@ -30,7 +30,7 @@ public:
         worker_ = std::thread(&MapLoader::LoadCsvAsync, this, filename);
     }
 
-    bool IsFinished() const
+    bool IsFinished() const 
     {
         return isFinished_;
     }
@@ -42,9 +42,9 @@ public:
             worker_.join();
         }
 
-        for (const auto& row : mapData_)
+        for (const auto& row : mapData_) 
         {
-            for (int tileID : row)
+            for (int tileID : row) 
             {
                 switch (tileID)
                 {
@@ -57,17 +57,17 @@ public:
     }
 
 private:
-    void LoadCsvAsync(std::string filename)
+    void LoadCsvAsync(std::string filename) 
     {
         std::ifstream file(filename);
-        if (!file.is_open())
+        if (!file.is_open()) 
         {
-            isFinished_ = true;
+            isFinished_ = true; 
             return;
         }
 
         std::string line;
-        while (std::getline(file, line))
+        while (std::getline(file, line)) 
         {
             std::vector<int> row;
             std::stringstream ss(line);
@@ -75,13 +75,13 @@ private:
 
             while (std::getline(ss, cell, ','))
             {
-                try
+                try 
                 {
                     row.push_back(std::stoi(cell));
                 }
                 catch (...)
                 {
-
+                   
                     row.push_back(EMPTY);
                 }
             }
@@ -98,13 +98,13 @@ private:
     std::atomic<bool> isFinished_;
 };
 
-int main()
+int main() 
 {
     MapLoader loader;
 
     loader.StartLoad("blocks.csv");
 
-    while (!loader.IsFinished())
+    while (!loader.IsFinished()) 
     {
     }
 
