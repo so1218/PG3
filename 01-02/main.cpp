@@ -30,7 +30,6 @@ int main()
 
     sort(emails.begin(), emails.end());
 
-    cout << "学籍番号順" << endl;
     for (const auto& email : emails)
     {
         cout << email << endl;
