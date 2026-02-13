@@ -60,7 +60,7 @@ int main()
     {
         if (strcmp(it->name, "田端") == 0)
         {
-            yamanotesen.insert(it, { "西日暮里", 2019 });
+            yamanotesen.insert(it, { "西日暮里", 1971});
             break;
         }
     }
@@ -69,7 +69,7 @@ int main()
     {
         if (strcmp(it->name, "田町") == 0)
         {
-            yamanotesen.insert(it, { "高輪ゲートウェイ", 2022 });
+            yamanotesen.insert(it, { "高輪ゲートウェイ", 2020 });
             break;
         }
     }

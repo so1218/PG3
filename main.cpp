@@ -1,114 +1,82 @@
 #include <iostream>
-#include <vector>
-#include <string>
-#include <fstream>
-#include <sstream>
-#include <thread>
-#include <atomic>
+#include <list>
+#include <cstring>
 
-enum TileType
+using namespace std;
+
+struct Station
 {
-    EMPTY = 0,
-    BLOCK = 1,
+    const char* name;
+    int openedYear;
 };
 
-class MapLoader
+void printStations(const list<Station>& stations, int year)
 {
-public:
-    MapLoader() : isFinished_(false) {}
-
-    ~MapLoader()
+    cout << year << "年" << endl;
+    for (const auto& station : stations)
     {
-        if (worker_.joinable())
+        if (station.openedYear <= year)
         {
-            worker_.join();
+            cout << station.name << endl;
         }
     }
-
-    void StartLoad(const std::string& filename)
-    {
-        worker_ = std::thread(&MapLoader::LoadCsvAsync, this, filename);
-    }
-
-    bool IsFinished() const
-    {
-        return isFinished_;
-    }
-
-    void Draw()
-    {
-        if (worker_.joinable())
-        {
-            worker_.join();
-        }
-
-        for (const auto& row : mapData_)
-        {
-            for (int tileID : row)
-            {
-                switch (tileID)
-                {
-                case BLOCK:  std::cout << "■ "; break;
-                default:     std::cout << "□ "; break;
-                }
-            }
-            std::cout << "\n";
-        }
-    }
-
-private:
-    void LoadCsvAsync(std::string filename)
-    {
-        std::ifstream file(filename);
-        if (!file.is_open())
-        {
-            isFinished_ = true;
-            return;
-        }
-
-        std::string line;
-        while (std::getline(file, line))
-        {
-            std::vector<int> row;
-            std::stringstream ss(line);
-            std::string cell;
-
-            while (std::getline(ss, cell, ','))
-            {
-                try
-                {
-                    row.push_back(std::stoi(cell));
-                }
-                catch (...)
-                {
-
-                    row.push_back(EMPTY);
-                }
-            }
-            mapData_.push_back(row);
-        }
-
-        file.close();
-        isFinished_ = true;
-    }
-
-private:
-    std::vector<std::vector<int>> mapData_;
-    std::thread worker_;
-    std::atomic<bool> isFinished_;
-};
+    cout << endl;
+}
 
 int main()
 {
-    MapLoader loader;
+    list<Station> yamanotesen;
 
-    loader.StartLoad("blocks.csv");
+    yamanotesen.push_back({ "東京", 1970 });
+    yamanotesen.push_back({ "神田", 1970 });
+    yamanotesen.push_back({ "秋葉原", 1970 });
+    yamanotesen.push_back({ "御徒町", 1970 });
+    yamanotesen.push_back({ "上野", 1970 });
+    yamanotesen.push_back({ "鶯谷", 1970 });
+    yamanotesen.push_back({ "日暮里", 1970 });
+    yamanotesen.push_back({ "田端", 1970 });
+    yamanotesen.push_back({ "駒込", 1970 });
+    yamanotesen.push_back({ "巣鴨", 1970 });
+    yamanotesen.push_back({ "大塚", 1970 });
+    yamanotesen.push_back({ "池袋", 1970 });
+    yamanotesen.push_back({ "目白", 1970 });
+    yamanotesen.push_back({ "高田馬場", 1970 });
+    yamanotesen.push_back({ "新大久保", 1970 });
+    yamanotesen.push_back({ "新宿", 1970 });
+    yamanotesen.push_back({ "代々木", 1970 });
+    yamanotesen.push_back({ "原宿", 1970 });
+    yamanotesen.push_back({ "渋谷", 1970 });
+    yamanotesen.push_back({ "恵比寿", 1970 });
+    yamanotesen.push_back({ "目黒", 1970 });
+    yamanotesen.push_back({ "五反田", 1970 });
+    yamanotesen.push_back({ "大崎", 1970 });
+    yamanotesen.push_back({ "品川", 1970 });
+    yamanotesen.push_back({ "田町", 1970 });
+    yamanotesen.push_back({ "浜松町", 1970 });
+    yamanotesen.push_back({ "新橋", 1970 });
+    yamanotesen.push_back({ "有楽町", 1970 });
 
-    while (!loader.IsFinished())
+    for (auto it = yamanotesen.begin(); it != yamanotesen.end(); ++it)
     {
+        if (strcmp(it->name, "田端") == 0)
+        {
+            yamanotesen.insert(it, { "西日暮里", 2019 });
+            break;
+        }
     }
 
-    loader.Draw();
+    for (auto it = yamanotesen.begin(); it != yamanotesen.end(); ++it)
+    {
+        if (strcmp(it->name, "田町") == 0)
+        {
+            yamanotesen.insert(it, { "高輪ゲートウェイ", 2022 });
+            break;
+        }
+    }
+
+    printStations(yamanotesen, 1970);
+    printStations(yamanotesen, 2019);
+    printStations(yamanotesen, 2022);
 
     return 0;
 }
